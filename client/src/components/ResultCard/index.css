@@ -1,0 +1,31 @@
+.result-card-style {
+  background-color: #4285f4;
+  color: #ffffff;
+  padding: 15px;
+  border-radius: 25px;
+}
+
+.card-horizontal {
+  display: flex;
+}
+
+.image {
+  padding: 0;
+  overflow: hidden;
+  height: 200px;
+  margin-bottom: 5px;
+}
+
+.description {
+  overflow: hidden;
+  position: relative;
+  max-width: 100%;
+}
+
+.btn-group {
+  float: right !important;
+}
+.rightButton {
+  margin-left: 10px;
+
+}

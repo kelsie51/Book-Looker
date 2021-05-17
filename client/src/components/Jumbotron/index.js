@@ -8,11 +8,10 @@ function Jumbotron({ children }) {
       style={{ 
         height: 300, 
         fontSize: "1em",
-        clear: "both",
-         paddingTop: 125,
-          textAlign: "center",
-          backgroundImage: `url(${bookPhoto})`,
-          backgroundSize: "cover"
+        paddingTop: 130,
+        textAlign: "center",
+        backgroundImage: `url(${bookPhoto})`,
+        backgroundSize: "cover"
       }}
       className="jumbotron"
     >
