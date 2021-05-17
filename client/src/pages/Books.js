@@ -1,108 +1,65 @@
-import React, { useState, useEffect } from "react";
-import DeleteBtn from "../components/DeleteBtn";
+import React, { useState } from "react";
 import Jumbotron from "../components/Jumbotron";
+import SearchBar from "../components/SearchBar";
+import Results from "../components/Results";
 import API from "../utils/API";
-import { Link } from "react-router-dom";
-import { Col, Row, Container } from "../components/Grid";
-import { List, ListItem } from "../components/List";
-import { Input, TextArea, FormBtn } from "../components/Form";
 
-function Books() {
-  const [books, setBooks] = useState([])
-  const [formObject, setFormObject] = useState({})
+function SearchPage() {
 
-  useEffect(() => {
-    loadBooks()
-  }, [])
+    const [search, setSearch] = useState("");
+    const [books, setBooks] = useState([]);
 
-  function loadBooks() {
-    API.getBooks()
-      .then(res => 
-        setBooks(res.data)
-      )
-      .catch(err => console.log(err));
-  };
-
-  function deleteBook(id) {
-    API.deleteBook(id)
-      .then(res => loadBooks())
-      .catch(err => console.log(err));
-  }
-
-  function handleInputChange(event) {
-    const { name, value } = event.target;
-    setFormObject({...formObject, [name]: value})
-  };
-
-  function handleFormSubmit(event) {
-    event.preventDefault();
-    if (formObject.title && formObject.author) {
-      API.saveBook({
-        title: formObject.title,
-        author: formObject.author,
-        synopsis: formObject.synopsis
-      })
-        .then(res => loadBooks())
-        .catch(err => console.log(err));
+    function handleSearchChange(e) {
+        let { value } = e.target;
+        setSearch(value);
     }
-  };
+
+    function searchGoogleBooks(e) {
+        e.preventDefault();
+
+        API.searchGoogleBooks(search).then(res => {
+            setBooks(res.data.items);
+            setSearch("");
+        })
+            .catch(err => {
+                console.log(err);
+            });
+    }
+
+    function handleSave(data) {
+        console.log(data);
+        API.saveBook({
+            title: data.title,
+            authors: data.auth,
+            description: data.desc,
+            image: data.img,
+            link: data.link
+        }).then(res => {
+            console.log(res)
+            alert("Book was saved!");
+        });
+    }
 
     return (
-      <Container fluid>
-        <Row>
-          <Col size="md-6">
-            <Jumbotron>
-              <h1>What Books Should I Read?</h1>
-            </Jumbotron>
-            <form>
-              <Input
-                onChange={handleInputChange}
-                name="title"
-                placeholder="Title (required)"
-              />
-              <Input
-                onChange={handleInputChange}
-                name="author"
-                placeholder="Author (required)"
-              />
-              <TextArea
-                onChange={handleInputChange}
-                name="synopsis"
-                placeholder="Synopsis (Optional)"
-              />
-              <FormBtn
-                disabled={!(formObject.author && formObject.title)}
-                onClick={handleFormSubmit}
-              >
-                Submit Book
-              </FormBtn>
-            </form>
-          </Col>
-          <Col size="md-6 sm-12">
-            <Jumbotron>
-              <h1>Books On My List</h1>
-            </Jumbotron>
-            {books.length ? (
-              <List>
-                {books.map(book => (
-                  <ListItem key={book._id}>
-                    <Link to={"/books/" + book._id}>
-                      <strong>
-                        {book.title} by {book.author}
-                      </strong>
-                    </Link>
-                    <DeleteBtn onClick={() => deleteBook(book._id)} />
-                  </ListItem>
-                ))}
-              </List>
-            ) : (
-              <h3>No Results to Display</h3>
-            )}
-          </Col>
-        </Row>
-      </Container>
+        <div className="container-fluid">
+            <div className="row">
+                <div className="col-12">
+                    <Jumbotron />
+                </div>
+            </div>
+
+            <div className="row">
+                <div className="col-12">
+                    <SearchBar title="Book Search" value={search} handleSearchChange={handleSearchChange} searchButton={searchGoogleBooks} />
+                </div>
+            </div>
+
+            <div className="row">
+                <Results books={books} save={true} handleSave={handleSave} />
+            </div>
+
+        </div>
     );
-  }
+}
 
-
-export default Books;
+export default SearchPage;

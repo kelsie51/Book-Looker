@@ -8,7 +8,6 @@
     "start:prod": "node server.js",
     "start:dev": "concurrently \"nodemon --ignore 'client/*'\" \"npm run client\"",
     "client": "cd client && npm run start",
-    "seed": "node scripts/seedDB.js",
     "install": "cd client && npm install",
     "build": "cd client && npm run build",
     "heroku-postbuild": "npm run build"
@@ -24,6 +23,12 @@
     "dotenv": "^8.2.0",
     "express": "^4.16.3",
     "if-env": "^1.0.4",
-    "mongoose": "^5.3.16"
+    "mongoose": "^5.3.16",
+    "node-sass": "^4.14.1",
+    "react": "^16.13.1",
+    "react-card-flip": "^1.0.11",
+    "react-dom": "^16.13.1",
+    "reactstrap": "^8.5.1",
+    "serve": "^11.3.2"
   }
 }
